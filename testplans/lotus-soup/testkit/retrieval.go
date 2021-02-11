@@ -30,6 +30,7 @@ func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, 
 		t.D().Counter(fmt.Sprintf("find-data.offer,miner=%s", o.Miner)).Inc(1)
 	}
 	t.D().ResettingHistogram("find-data").Update(int64(time.Since(t1)))
+	t.R().RecordPoint(fmt.Sprintf("find-data"), float64(time.Since(t1).Milliseconds()))
 
 	if len(offers) < 1 {
 		panic("no offers")
@@ -56,6 +57,7 @@ func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, 
 		return err
 	}
 	t.D().ResettingHistogram("retrieve-data").Update(int64(time.Since(t1)))
+	t.R().RecordPoint(fmt.Sprintf("retrieve-data"), float64(time.Since(t1).Milliseconds()))
 
 	rdata, err := ioutil.ReadFile(filepath.Join(rpath, "ret"))
 	if err != nil {
