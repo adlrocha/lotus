@@ -156,3 +156,5 @@ replace github.com/golangci/golangci-lint => github.com/golangci/golangci-lint v
 replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
 
 replace github.com/filecoin-project/test-vectors => ./extern/test-vectors
+
+replace github.com/filecoin-project/go-fil-markets => github.com/adlrocha/go-fil-markets v1.0.8-0.20210212085647-eadcd15f37f5

@@ -35,9 +35,14 @@ require (
 	github.com/testground/sdk-go v0.2.6
 	go.opencensus.io v0.22.5
 	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 )
 
 // This will work in all build modes: docker:go, exec:go, and local go build.
 // On docker:go and exec:go, it maps to /extra/filecoin-ffi, as it's picked up
 // as an "extra source" in the manifest.
 replace github.com/filecoin-project/filecoin-ffi => ../../extern/filecoin-ffi
+
+// Modified versions with 3DMs explorations.
+replace github.com/filecoin-project/go-fil-markets => github.com/adlrocha/go-fil-markets v1.0.8-0.20210212085647-eadcd15f37f5
+// replace github.com/filecoin-project/lotus => /home/adlrocha/Desktop/main/work/ProtocolLabs/repos/filecoin/lotus

@@ -59,6 +59,11 @@ func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, 
 	t.D().ResettingHistogram("retrieve-data").Update(int64(time.Since(t1)))
 	t.R().RecordPoint(fmt.Sprintf("retrieve-data"), float64(time.Since(t1).Milliseconds()))
 
+	a := client.ClientRetrievalStats()
+	for k, v := range a {
+		t.R().RecordPoint(fmt.Sprintf(k), float64(v))
+	}
+
 	rdata, err := ioutil.ReadFile(filepath.Join(rpath, "ret"))
 	if err != nil {
 		return err

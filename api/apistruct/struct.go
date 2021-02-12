@@ -169,6 +169,7 @@ type FullNodeStruct struct {
 		ClientGetDealUpdates                      func(ctx context.Context) (<-chan api.DealInfo, error)                                                            `perm:"read"`
 		ClientRetrieve                            func(ctx context.Context, order api.RetrievalOrder, ref *api.FileRef) error                                       `perm:"admin"`
 		ClientRetrieveWithEvents                  func(ctx context.Context, order api.RetrievalOrder, ref *api.FileRef) (<-chan marketevents.RetrievalEvent, error) `perm:"admin"`
+		ClientRetrievalStats                      func() retrievalmarket.RetrievalStats                                                                             `perm:"admin"`
 		ClientQueryAsk                            func(ctx context.Context, p peer.ID, miner address.Address) (*storagemarket.StorageAsk, error)                    `perm:"read"`
 		ClientDealPieceCID                        func(ctx context.Context, root cid.Cid) (api.DataCIDSize, error)                                                  `perm:"read"`
 		ClientCalcCommP                           func(ctx context.Context, inpath string) (*api.CommPRet, error)                                                   `perm:"read"`
@@ -622,6 +623,9 @@ func (c *FullNodeStruct) ClientRetrieve(ctx context.Context, order api.Retrieval
 
 func (c *FullNodeStruct) ClientRetrieveWithEvents(ctx context.Context, order api.RetrievalOrder, ref *api.FileRef) (<-chan marketevents.RetrievalEvent, error) {
 	return c.Internal.ClientRetrieveWithEvents(ctx, order, ref)
+}
+func (c *FullNodeStruct) ClientRetrievalStats() retrievalmarket.RetrievalStats {
+	return c.Internal.ClientRetrievalStats()
 }
 
 func (c *FullNodeStruct) ClientQueryAsk(ctx context.Context, p peer.ID, miner address.Address) (*storagemarket.StorageAsk, error) {

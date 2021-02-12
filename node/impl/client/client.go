@@ -546,6 +546,11 @@ func readSubscribeEvents(ctx context.Context, dealID retrievalmarket.DealID, sub
 	}
 }
 
+// ClientRetrievalStats returns stats from the retrieval scheme used by client.
+func (a *API) ClientRetrievalStats() rm.RetrievalStats {
+	return a.Retrieval.Stats()
+}
+
 func (a *API) clientRetrieve(ctx context.Context, order api.RetrievalOrder, ref *api.FileRef, events chan marketevents.RetrievalEvent) {
 	defer close(events)
 

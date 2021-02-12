@@ -6,8 +6,10 @@
   plan = "lotus-soup"
   case = "retrieval"
   total_instances = 3
-  builder = "docker:go"
-  runner = "local:docker"
+  # builder = "docker:go"
+  # runner = "local:docker"
+  builder = "exec:go"
+  runner = "local:exec"
 
 [global.build]
   selectors = ["testground"]
