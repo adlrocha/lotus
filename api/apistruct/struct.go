@@ -170,6 +170,7 @@ type FullNodeStruct struct {
 		ClientRetrieve                            func(ctx context.Context, order api.RetrievalOrder, ref *api.FileRef) error                                       `perm:"admin"`
 		ClientRetrieveWithEvents                  func(ctx context.Context, order api.RetrievalOrder, ref *api.FileRef) (<-chan marketevents.RetrievalEvent, error) `perm:"admin"`
 		ClientRetrievalStats                      func() retrievalmarket.RetrievalStats                                                                             `perm:"admin"`
+		ClientRetrievalResetStats                 func()                                                                                                            `perm:"admin"`
 		ClientQueryAsk                            func(ctx context.Context, p peer.ID, miner address.Address) (*storagemarket.StorageAsk, error)                    `perm:"read"`
 		ClientDealPieceCID                        func(ctx context.Context, root cid.Cid) (api.DataCIDSize, error)                                                  `perm:"read"`
 		ClientCalcCommP                           func(ctx context.Context, inpath string) (*api.CommPRet, error)                                                   `perm:"read"`
@@ -626,6 +627,10 @@ func (c *FullNodeStruct) ClientRetrieveWithEvents(ctx context.Context, order api
 }
 func (c *FullNodeStruct) ClientRetrievalStats() retrievalmarket.RetrievalStats {
 	return c.Internal.ClientRetrievalStats()
+}
+
+func (c *FullNodeStruct) ClientRetrievalResetStats() {
+	c.Internal.ClientRetrievalResetStats()
 }
 
 func (c *FullNodeStruct) ClientQueryAsk(ctx context.Context, p peer.ID, miner address.Address) (*storagemarket.StorageAsk, error) {

@@ -551,6 +551,11 @@ func (a *API) ClientRetrievalStats() rm.RetrievalStats {
 	return a.Retrieval.Stats()
 }
 
+// ClientRetrievalResetStats returns stats from the retrieval scheme used by client.
+func (a *API) ClientRetrievalResetStats() {
+	a.Retrieval.ResetStats()
+}
+
 func (a *API) clientRetrieve(ctx context.Context, order api.RetrievalOrder, ref *api.FileRef, events chan marketevents.RetrievalEvent) {
 	defer close(events)
 

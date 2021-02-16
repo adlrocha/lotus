@@ -20,6 +20,10 @@ import (
 	"github.com/ipld/go-car"
 )
 
+func ResetStats(client api.FullNode) {
+	client.ClientRetrievalResetStats()
+}
+
 func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, fcid cid.Cid, _ *cid.Cid, carExport bool, data []byte) error {
 	t1 := time.Now()
 	offers, err := client.ClientFindData(ctx, fcid, nil)
@@ -30,7 +34,7 @@ func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, 
 		t.D().Counter(fmt.Sprintf("find-data.offer,miner=%s", o.Miner)).Inc(1)
 	}
 	t.D().ResettingHistogram("find-data").Update(int64(time.Since(t1)))
-	t.R().RecordPoint(fmt.Sprintf("find-data"), float64(time.Since(t1).Milliseconds()))
+	t.R().RecordPoint(fmt.Sprintf("find-data"), float64(time.Since(t1).Nanoseconds()))
 
 	if len(offers) < 1 {
 		panic("no offers")
@@ -57,12 +61,6 @@ func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, 
 		return err
 	}
 	t.D().ResettingHistogram("retrieve-data").Update(int64(time.Since(t1)))
-	t.R().RecordPoint(fmt.Sprintf("retrieve-data"), float64(time.Since(t1).Milliseconds()))
-
-	a := client.ClientRetrievalStats()
-	for k, v := range a {
-		t.R().RecordPoint(fmt.Sprintf(k), float64(v))
-	}
 
 	rdata, err := ioutil.ReadFile(filepath.Join(rpath, "ret"))
 	if err != nil {
@@ -75,6 +73,11 @@ func RetrieveData(t *TestEnvironment, ctx context.Context, client api.FullNode, 
 
 	if !bytes.Equal(rdata, data) {
 		return errors.New("wrong data retrieved")
+	}
+
+	a := client.ClientRetrievalStats()
+	for k, v := range a {
+		t.R().RecordPoint(fmt.Sprintf(k), float64(v))
 	}
 
 	t.RecordMessage("retrieved successfully")

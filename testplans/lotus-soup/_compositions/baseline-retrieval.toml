@@ -6,10 +6,10 @@
   plan = "lotus-soup"
   case = "retrieval"
   total_instances = 3
-  # builder = "docker:go"
-  # runner = "local:docker"
-  builder = "exec:go"
-  runner = "local:exec"
+  builder = "docker:go"
+  runner = "local:docker"
+  # builder = "exec:go"
+  # runner = "local:exec"
 
 [global.build]
   selectors = ["testground"]
@@ -29,6 +29,7 @@
   random_beacon_type = "mock"
   mining_mode = "natural"
   run_count = "3"
+  file_size = "5000000"
 
 [[groups]]
   id = "bootstrapper"

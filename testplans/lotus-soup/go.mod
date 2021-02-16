@@ -22,7 +22,6 @@ require (
 	github.com/ipfs/go-datastore v0.4.5
 	github.com/ipfs/go-ipfs-files v0.0.8
 	github.com/ipfs/go-ipld-format v0.2.0
-	github.com/ipfs/go-log/v2 v2.1.2-0.20200626104915-0016c0b4b3e4
 	github.com/ipfs/go-merkledag v0.3.2
 	github.com/ipfs/go-unixfs v0.2.4
 	github.com/ipld/go-car v0.1.1-0.20201119040415-11b6074b6d4d
@@ -35,7 +34,6 @@ require (
 	github.com/testground/sdk-go v0.2.6
 	go.opencensus.io v0.22.5
 	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 )
 
 // This will work in all build modes: docker:go, exec:go, and local go build.
@@ -44,5 +42,8 @@ require (
 replace github.com/filecoin-project/filecoin-ffi => ../../extern/filecoin-ffi
 
 // Modified versions with 3DMs explorations.
-replace github.com/filecoin-project/go-fil-markets => github.com/adlrocha/go-fil-markets v1.0.8-0.20210212085647-eadcd15f37f5
+replace github.com/filecoin-project/go-fil-markets => github.com/adlrocha/go-fil-markets v1.0.8-0.20210216083003-aa7e0dcab206
+
+replace github.com/filecoin-project/lotus => github.com/adlrocha/lotus v1.5.0-pre3.0.20210212100143-33489170302f
+
 // replace github.com/filecoin-project/lotus => /home/adlrocha/Desktop/main/work/ProtocolLabs/repos/filecoin/lotus

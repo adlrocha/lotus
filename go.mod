@@ -157,4 +157,4 @@ replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
 
 replace github.com/filecoin-project/test-vectors => ./extern/test-vectors
 
-replace github.com/filecoin-project/go-fil-markets => github.com/adlrocha/go-fil-markets v1.0.8-0.20210212085647-eadcd15f37f5
+replace github.com/filecoin-project/go-fil-markets => github.com/adlrocha/go-fil-markets aa7e0dcab206387d4c2ddc2f1f8e23fe2146e63f
