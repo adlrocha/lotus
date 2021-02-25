@@ -44,6 +44,6 @@ replace github.com/filecoin-project/filecoin-ffi => ../../extern/filecoin-ffi
 // Modified versions with 3DMs explorations.
 replace github.com/filecoin-project/go-fil-markets => github.com/adlrocha/go-fil-markets v1.0.8-0.20210216083003-aa7e0dcab206
 
-replace github.com/filecoin-project/lotus => github.com/adlrocha/lotus v1.5.0-pre3.0.20210212100143-33489170302f
+replace github.com/filecoin-project/lotus => github.com/adlrocha/lotus v1.5.0-pre3.0.20210216090133-ec102c192e65
 
 // replace github.com/filecoin-project/lotus => /home/adlrocha/Desktop/main/work/ProtocolLabs/repos/filecoin/lotus

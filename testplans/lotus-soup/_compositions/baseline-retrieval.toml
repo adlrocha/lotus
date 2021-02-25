@@ -30,6 +30,7 @@
   mining_mode = "natural"
   run_count = "3"
   file_size = "5000000"
+  latency_ms = "50"
 
 [[groups]]
   id = "bootstrapper"

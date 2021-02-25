@@ -24,6 +24,10 @@ func ApplyNetworkParameters(t *TestEnvironment) {
 		r := t.DurationRangeParam("latency_range")
 		ls.Latency = r.ChooseRandom()
 		t.D().RecordPoint("latency_ms", float64(ls.Latency.Milliseconds()))
+	} else if t.IsParamSet("latency_ms") {
+		ls.Latency = time.Duration(t.IntParam("latency_ms")) * time.Millisecond
+		t.RecordMessage("Set latency_ms to: %v", ls.Latency)
+		t.D().RecordPoint("latency_ms", float64(ls.Latency.Milliseconds()))
 	}
 
 	if t.IsParamSet("jitter_range") {

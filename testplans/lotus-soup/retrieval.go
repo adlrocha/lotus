@@ -55,9 +55,9 @@ func retrieval(t *testkit.TestEnvironment) error {
 	time.Sleep(50 * time.Second)
 
 	// TODO: Support several byte sizes. Make deals and then retrieve each file size.
-	fileSize := 10000
+	fileSize := 100000
 	if t.IsParamSet("file_size") {
-		fileSize = t.IntParam("run_count")
+		fileSize = t.IntParam("file_size")
 	}
 	t.RecordMessage("Generating random file of size: %d", fileSize)
 
@@ -118,6 +118,9 @@ func retrieval(t *testkit.TestEnvironment) error {
 
 		t.RecordMessage("Retrieval #%d for %s done!", i, fcid.Root)
 
+		// Collect Bandwidth Stats
+		collectBandwidthStats(ctx, t, cl)
+
 		// Reset Stats for the next retrieval
 		testkit.ResetStats(client)
 
@@ -133,4 +136,12 @@ func retrieval(t *testkit.TestEnvironment) error {
 	// Signal finish by all nodes
 	t.SyncClient.MustSignalAndWait(ctx, testkit.StateDone, t.TestInstanceCount)
 	return nil
+}
+
+func collectBandwidthStats(ctx context.Context, t *testkit.TestEnvironment, c *testkit.LotusClient) {
+	stats, _ := c.FullApi.NetBandwidthStatsByProtocol(ctx)
+	for k, v := range stats {
+		t.R().RecordPoint(string(k)+"_totalIn", float64(v.TotalIn))
+		t.R().RecordPoint(string(k)+"_totalOut", float64(v.TotalOut))
+	}
 }

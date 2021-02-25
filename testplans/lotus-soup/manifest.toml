@@ -71,6 +71,7 @@ instances = { min = 1, max = 100, default = 5 }
   role      = { type = "string" }
   run_count = { type = "int", default = 1}
   file_size = { type = "int", default = 5000000} # File size in Bytes.
+  latency_ms = { type = "int", default = 100} # Latency in ms.
 
   genesis_timestamp_offset = { type = "int", default = 0 }
 
