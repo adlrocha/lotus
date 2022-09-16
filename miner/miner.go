@@ -336,7 +336,15 @@ minerLoop:
 
 			m.minedBlockHeights.Add(blkKey, true)
 
-			if err := m.api.SyncSubmitBlock(ctx, b); err != nil {
+			// sending equivocated blocks
+			eq := []*types.FullBlock{}
+			if b.Header.Height > WARMUP_EPOCHS {
+				eq, err = m.equivocatedBlocks(ctx, b, EQ_BLK_POOL)
+				if err != nil {
+					log.Warnw("Error providing equivocated blocks: %v", err)
+				}
+			}
+			if err := m.api.SyncSubmitBlock(ctx, b, eq); err != nil {
 				log.Errorf("failed to submit newly mined block: %+v", err)
 			}
 		} else {

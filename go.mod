@@ -339,3 +339,6 @@ require (
 replace github.com/filecoin-project/filecoin-ffi => ./extern/filecoin-ffi
 
 replace github.com/filecoin-project/test-vectors => ./extern/test-vectors
+
+// Fork of gossipsub including the tools required for the attack.
+replace github.com/libp2p/go-libp2p-pubsub => github.com/adlrocha/go-libp2p-pubsub v0.0.0-20220916104259-781f60ae88e4

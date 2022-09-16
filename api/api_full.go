@@ -205,7 +205,7 @@ type FullNode interface {
 
 	// SyncSubmitBlock can be used to submit a newly created block to the.
 	// network through this node
-	SyncSubmitBlock(ctx context.Context, blk *types.BlockMsg) error //perm:write
+	SyncSubmitBlock(ctx context.Context, blk *types.BlockMsg, eqs []*types.FullBlock) error //perm:write
 
 	// SyncIncomingBlocks returns a channel streaming incoming, potentially not
 	// yet synced block headers.

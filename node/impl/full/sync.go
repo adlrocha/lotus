@@ -2,10 +2,12 @@ package full
 
 import (
 	"context"
+	"fmt"
 	"sync/atomic"
 
 	"github.com/ipfs/go-cid"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
+	"github.com/libp2p/go-libp2p/core/peer"
 	"go.uber.org/fx"
 	"golang.org/x/xerrors"
 
@@ -50,7 +52,7 @@ func (a *SyncAPI) SyncState(ctx context.Context) (*api.SyncState, error) {
 	return out, nil
 }
 
-func (a *SyncAPI) SyncSubmitBlock(ctx context.Context, blk *types.BlockMsg) error {
+func (a *SyncAPI) SyncSubmitBlock(ctx context.Context, blk *types.BlockMsg, eq []*types.FullBlock) error {
 	parent, err := a.Syncer.ChainStore().GetBlock(ctx, blk.Header.Parents[0])
 	if err != nil {
 		return xerrors.Errorf("loading parent block: %w", err)
@@ -92,12 +94,45 @@ func (a *SyncAPI) SyncSubmitBlock(ctx context.Context, blk *types.BlockMsg) erro
 		return xerrors.Errorf("sync to submitted block failed: %w", err)
 	}
 
-	b, err := blk.Serialize()
-	if err != nil {
-		return xerrors.Errorf("serializing block for pubsub publishing failed: %w", err)
+	pids := a.PubSub.ListPeers(build.BlocksTopic(a.NetName))
+
+	// Send different blocks from the list of equivocated ones
+	// to the different peers to force them to fork and partition
+	// the network.
+	for i, p := range pids {
+		if p != a.Syncer.LocalPeer() && len(eq) > 0 {
+			var out types.BlockMsg
+			fblk := eq[i%len(eq)]
+			out.Header = fblk.Header
+			for _, msg := range fblk.BlsMessages {
+				out.BlsMessages = append(out.BlsMessages, msg.Cid())
+			}
+			for _, msg := range fblk.SecpkMessages {
+				out.SecpkMessages = append(out.SecpkMessages, msg.Cid())
+			}
+			ser, err := out.Serialize()
+			if err != nil {
+				return xerrors.Errorf("serializing block for pubsub publishing failed: %w", err)
+			}
+			// Sending it individually to each peer in a valid gossipsub message as if it
+			// was successfully broadcasted to everyone.
+			err = a.PubSub.PublishToPeer(build.BlocksTopic(a.NetName), ser, []peer.ID{p})
+			if err != nil {
+				return fmt.Errorf("error publishing directly to peers: %v", err)
+			}
+			log.Infof("Equivocated block published successfully (cid=%v)", fblk.Cid())
+		}
 	}
 
-	return a.PubSub.Publish(build.BlocksTopic(a.NetName), b) //nolint:staticcheck
+	// NOTE: We don´t publish the real block we mined to the rest of the network.
+	// We keep the valid chain to ourselves.
+	//
+	// b, err := blk.Serialize()
+	// if err != nil {
+	// 	return xerrors.Errorf("serializing block for pubsub publishing failed: %w", err)
+	// }
+	// return a.PubSub.Publish(build.BlocksTopic(a.NetName), b) //nolint:staticcheck
+	return nil
 }
 
 func (a *SyncAPI) SyncIncomingBlocks(ctx context.Context) (<-chan *types.BlockHeader, error) {
