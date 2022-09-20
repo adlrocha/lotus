@@ -15,7 +15,7 @@ import (
 
 // Warmup epochs that used by the attacker before it starts
 // sending equivocated blocks.
-const WARMUP_EPOCHS = 7
+const WARMUP_EPOCHS = 15
 
 // Number of equivocated blocks kept in the pool each round for
 // its use for the attack.
